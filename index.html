@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BAINARI｜システム稼働状況</title>
+
+<link rel="icon" type="image/png" href="243101166.png">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        Arial,
+        "Noto Sans JP",
+        sans-serif;
+
+    background:#fff;
+    color:#17233c;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    position:fixed;
+    top:0;
+    right:0;
+    width:100%;
+    padding:4px 15px;
+    z-index:1000;
+
+    display:flex;
+    justify-content:flex-end;
+}
+
+nav{
+    width:max-content;
+    max-width:calc(100vw - 30px);
+    height:58px;
+
+    display:flex;
+    align-items:center;
+
+    background:#006F68;
+    border-radius:8px;
+    overflow:hidden;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.12);
+}
+
+nav a{
+    height:58px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+
+    padding:0 10px;
+
+    color:#fff;
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:bold;
+
+    white-space:nowrap;
+
+    transition:.2s;
+}
+
+nav a:hover{
+    background:rgba(255,255,255,.14);
+}
+
+.icon{
+    width:19px;
+    height:19px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+}
+
+.icon svg{
+    width:19px;
+    height:19px;
+
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.menu-button{
+    display:none;
+
+    position:absolute;
+    top:4px;
+    right:15px;
+
+    width:50px;
+    height:50px;
+
+    border:0;
+    border-radius:8px;
+
+    background:#006F68;
+    color:#fff;
+
+    cursor:pointer;
+
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    gap:3px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.12);
+}
+
+.hamburger{
+    width:21px;
+    height:16px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.hamburger span{
+    width:21px;
+    height:2px;
+
+    display:block;
+
+    background:#fff;
+
+    border-radius:2px;
+
+    transition:.25s;
+}
+
+.menu-text{
+    font-size:8px;
+    line-height:8px;
+
+    font-weight:bold;
+}
+
+.menu-button.active
+.hamburger span:nth-child(1){
+    transform:
+        translateY(7px)
+        rotate(45deg);
+}
+
+.menu-button.active
+.hamburger span:nth-child(2){
+    opacity:0;
+}
+
+.menu-button.active
+.hamburger span:nth-child(3){
+    transform:
+        translateY(-7px)
+        rotate(-45deg);
+}
+
+.mobile-menu{
+    display:none;
+
+    position:absolute;
+
+    top:62px;
+    right:15px;
+
+    width:250px;
+
+    padding:5px;
+
+    background:#006F68;
+
+    border-radius:8px;
+
+    box-shadow:
+        0 6px 20px
+        rgba(0,0,0,.18);
+}
+
+.mobile-menu.active{
+    display:block;
+}
+
+.mobile-menu a{
+    width:100%;
+    min-height:47px;
+
+    padding:11px 14px;
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    color:#fff;
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:bold;
+
+    border-radius:5px;
+}
+
+.mobile-menu a:hover{
+    background:rgba(255,255,255,.14);
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main{
+    max-width:1280px;
+
+    margin:0 auto;
+
+    padding:
+        105px
+        28px
+        70px;
+}
+
+.title{
+    font-size:34px;
+
+    font-weight:800;
+
+    color:#17233c;
+
+    margin-bottom:8px;
+
+    letter-spacing:.5px;
+}
+
+.description{
+    font-size:15px;
+
+    color:#68758a;
+
+    margin-bottom:24px;
+
+    line-height:1.7;
+}
+
+.meta{
+    display:flex;
+
+    align-items:center;
+
+    gap:22px;
+
+    margin-bottom:25px;
+
+    color:#7a8798;
+
+    font-size:12px;
+}
+
+#system{
+    margin-right:auto;
+
+    color:#5f6f82;
+
+    font-weight:600;
+}
+
+
+/* =========================
+   MONITORING NOTICE
+========================= */
+
+.monitoring-notice{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+
+    margin-bottom:28px;
+    padding:14px 18px;
+
+    background:#f4f8f8;
+    border:1px solid #d5e4e3;
+    border-left:4px solid #006F68;
+    border-radius:10px;
+
+    color:#435366;
+    font-size:13.5px;
+    line-height:1.7;
+}
+
+.monitoring-notice-icon{
+    width:20px;
+    height:20px;
+    flex:0 0 20px;
+    margin-top:2px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#006F68;
+}
+
+.monitoring-notice-icon svg{
+    width:20px;
+    height:20px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* =========================
+   STATUS HEADING
+========================= */
+
+.status-heading{
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    margin-bottom:32px;
+
+    font-size:25px;
+
+    font-weight:800;
+
+    color:#17233c;
+}
+
+.status-heading::after{
+    content:"";
+
+    height:1px;
+
+    background:#d8e0e8;
+
+    flex:1;
+
+    margin-left:5px;
+}
+
+.status-heading-icon{
+    color:#16a085;
+
+    display:flex;
+    align-items:center;
+}
+
+.status-heading-icon svg{
+    width:28px;
+    height:28px;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:2;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* =========================
+   SYSTEM SECTION
+========================= */
+
+.system-section{
+    width:100%;
+
+    margin-bottom:46px;
+}
+
+.system-section:last-child{
+    margin-bottom:0;
+}
+
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.system-section-title{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:22px;
+
+    color:#17233c;
+
+    font-size:19px;
+
+    font-weight:800;
+}
+
+.system-section-title::before{
+    content:"";
+
+    width:7px;
+    height:7px;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    background:#006F68;
+}
+
+.system-section-title::after{
+    content:"";
+
+    height:1px;
+
+    flex:1;
+
+    background:#d8e0e8;
+}
+
+
+/* =========================
+   STATUS GRID
+========================= */
+
+.status-grid{
+    display:grid;
+
+    /* PCでは1行に3サービスを表示 */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap:24px;
+}
+
+
+/* =========================
+   STATUS CARD
+========================= */
+
+.status-card{
+    position:relative;
+
+    width:100%;
+    min-width:0;
+
+    background:#fff;
+
+    border:
+        1px solid
+        #e1e7ee;
+
+    border-radius:15px;
+
+    padding:
+        20px
+        24px
+        16px;
+
+    box-shadow:
+        0 3px 14px
+        rgba(29,52,84,.07);
+
+    transition:
+        transform .18s,
+        box-shadow .18s;
+}
+
+.status-card:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 7px 22px
+        rgba(29,52,84,.11);
+}
+
+.card-top{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:15px;
+
+    min-height:38px;
+}
+
+.service-title{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    min-width:0;
+
+    font-size:17px;
+
+    font-weight:800;
+
+    color:#17233c;
+}
+
+.service-title a{
+    color:inherit;
+    text-decoration:none;
+}
+
+.service-title a:hover{
+    text-decoration:underline;
+}
+
+.service-title span:last-child{
+    overflow:visible;
+
+    text-overflow:clip;
+
+    white-space:normal;
+}
+
+
+/* =========================
+   SERVICE ICON
+========================= */
+
+.service-icon{
+    width:31px;
+    height:31px;
+
+    flex:
+        0 0 31px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.service-icon svg{
+    width:31px;
+    height:31px;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:2;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.icon-server{
+    color:#2687df;
+}
+
+.icon-water{
+    color:#2387df;
+}
+
+.icon-calendar{
+    color:#bb68d6;
+}
+
+.icon-timer{
+    color:#ed962d;
+}
+
+.icon-card{
+    color:#9a5cdb;
+}
+
+.icon-stock{
+    color:#7b54d8;
+}
+
+.icon-password{
+    color:#2588d8;
+}
+
+
+/* =========================
+   STATUS BADGE
+========================= */
+
+.service-status{
+    flex:
+        0 0 auto;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:
+        7px
+        11px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    background:#e2f7ef;
+
+    color:#16876f;
+}
+
+.status-dot{
+    width:15px;
+    height:15px;
+
+    border-radius:50%;
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:#169b7b;
+
+    color:#fff;
+
+    font-size:10px;
+    line-height:1;
+}
+
+
+/* =========================
+   UPTIME BARS & TIMELINE
+========================= */
+
+.uptime{
+    display:grid;
+
+    grid-template-columns:
+        repeat(36,1fr);
+
+    gap:3px;
+
+    margin-top:19px;
+}
+
+.uptime span,
+.status-card.warning .uptime span,
+.status-card.error .uptime span,
+.status-card.maintenance .uptime span{
+    height:24px;
+    border-radius:2px;
+    background:#e1e7ee;
+    cursor:pointer;
+    transition:transform .12s, filter .12s;
+}
+
+.uptime span:hover{
+    filter:brightness(0.92);
+    transform:scaleY(1.08);
+}
+
+.uptime span.normal,
+.status-card .uptime span.normal{
+    background:#38cfaa !important;
+}
+
+.uptime span.warning,
+.status-card .uptime span.warning{
+    background:#f2b85b !important;
+}
+
+.uptime span.error,
+.status-card .uptime span.error{
+    background:#e681ad !important;
+}
+
+.uptime span.maintenance,
+.status-card .uptime span.maintenance{
+    background:#8fb2d8 !important;
+}
+
+.uptime-labels{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:7px;
+    font-size:11px;
+    color:#8a95a5;
+    font-weight:600;
+}
+
+
+/* =========================
+   CUSTOM TOOLTIP
+========================= */
+
+.bar-tooltip{
+    position:fixed;
+    z-index:100000;
+    pointer-events:none;
+    display:none;
+    background:#ffffff;
+    color:#17233c;
+    border:1px solid #d0d7de;
+    border-radius:6px;
+    padding:6px 11px;
+    font-size:12px;
+    font-weight:600;
+    white-space:nowrap;
+    box-shadow:0 4px 14px rgba(0,0,0,.15);
+    transform:translate(-50%, 14px);
+}
+
+
+/* =========================
+   NEW BADGE
+========================= */
+
+.new-badge{
+    position:absolute;
+
+    left:22px;
+    top:10px;
+
+    transform:
+        translateY(-50%);
+
+    padding:
+        3px
+        9px;
+
+    border-radius:999px;
+
+    background:#ff5b8a;
+
+    color:#fff;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    letter-spacing:.3px;
+}
+
+
+/* =========================
+   BADGE STATUS COLORS
+========================= */
+
+.status-card.warning
+.service-status{
+    background:#fff1d9;
+
+    color:#ad6a00;
+}
+
+.status-card.warning
+.status-dot{
+    background:#e39a20;
+}
+
+.status-card.error
+.service-status{
+    background:#fbe3ed;
+
+    color:#bd4879;
+}
+
+.status-card.error
+.status-dot{
+    background:#d65c8e;
+}
+
+.status-card.maintenance
+.service-status{
+    background:#e7f0fa;
+
+    color:#4f7da8;
+}
+
+.status-card.maintenance
+.status-dot{
+    background:#6e9bc8;
+}
+
+
+/* =========================
+   REPORT BOX
+========================= */
+
+.report-box{
+    position:fixed;
+
+    right:25px;
+    bottom:25px;
+
+    width:320px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.15);
+
+    border-top:
+        5px solid
+        #006F68;
+
+    z-index:9999;
+
+    animation:
+        fadeIn .3s;
+}
+
+.report-box h3{
+    color:#006F68;
+
+    margin-bottom:10px;
+
+    font-size:20px;
+}
+
+.report-box p{
+    color:#555;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    margin-bottom:15px;
+}
+
+.report-btn{
+    display:block;
+
+    text-align:center;
+
+    background:#006F68;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+}
+
+.report-btn:hover{
+    background:#00524d;
+}
+
+.close-btn{
+    position:absolute;
+
+    top:10px;
+    right:10px;
+
+    border:none;
+
+    background:none;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    color:#666;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    text-align:center;
+
+    padding:35px;
+
+    color:#8a95a5;
+
+    font-size:13px;
+}
+
+
+/* =========================
+   ACCESS NOTICE
+========================= */
+
+.access-consent{
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    z-index:99999;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:18px;
+
+    padding:
+        14px
+        20px;
+
+    background:
+        rgba(0,0,0,.92);
+
+    color:#fff;
+
+    box-shadow:
+        0 -3px 15px
+        rgba(0,0,0,.18);
+}
+
+.access-consent-text{
+    font-size:12px;
+
+    line-height:1.6;
+}
+
+.access-consent button{
+    flex-shrink:0;
+
+    padding:
+        9px
+        24px;
+
+    border:0;
+
+    border-radius:20px;
+
+    background:#fff;
+
+    color:#006F68;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+
+        transform:
+            translateY(20px);
+    }
+
+    to{
+        opacity:1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1050px){
+
+    nav a{
+        padding:0 7px;
+
+        font-size:11px;
+    }
+
+    .status-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    header{
+        padding:4px 8px;
+    }
+
+    nav{
+        display:none;
+    }
+
+    .menu-button{
+        display:flex;
+
+        right:8px;
+    }
+
+    .mobile-menu{
+        top:62px;
+
+        right:8px;
+    }
+
+    main{
+        padding:
+            92px
+            15px
+            50px;
+    }
+
+    .title{
+        font-size:29px;
+    }
+
+    .description{
+        font-size:14px;
+    }
+
+    .monitoring-notice{
+        margin-bottom:22px;
+        padding:12px 14px;
+        font-size:12.5px;
+    }
+
+    .status-heading{
+        font-size:22px;
+    }
+
+    .system-section-title{
+        font-size:18px;
+    }
+
+    .status-grid{
+        grid-template-columns:1fr;
+
+        gap:15px;
+    }
+
+    .status-card{
+        padding:
+            18px
+            18px
+            14px;
+    }
+
+    .service-title{
+        font-size:15px;
+    }
+
+    .service-status{
+        padding:
+            6px
+            9px;
+
+        font-size:11px;
+    }
+
+    .uptime{
+        gap:2px;
+    }
+
+    .uptime span,
+    .status-card.warning .uptime span,
+    .status-card.error .uptime span,
+    .status-card.maintenance .uptime span{
+        height:20px;
+    }
+
+    .meta{
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:5px;
+    }
+
+    #system{
+        margin-right:0;
+    }
+
+    .report-box{
+        left:15px;
+        right:15px;
+
+        bottom:15px;
+
+        width:auto;
+    }
+
+    .access-consent{
+        gap:10px;
+
+        padding:
+            10px
+            12px;
+    }
+
+    .access-consent-text{
+        font-size:10px;
+    }
+
+    .access-consent button{
+        padding:
+            8px
+            18px;
+
+        font-size:12px;
+    }
+
+}
+
+
+/* =========================
+   DARK BASE THEME
+   ミントグリーンのアクセントカラーは維持
+========================= */
+
+body{
+    background:#080d0c;
+    color:#edf5f2;
+}
+
+.title,
+.status-heading,
+.system-section-title,
+.service-title{
+    color:#edf5f2;
+}
+
+.description{
+    color:#a7b8b2;
+}
+
+.meta{
+    color:#91a39c;
+}
+
+#system{
+    color:#b8c9c2;
+}
+
+.status-heading::after,
+.system-section-title::after{
+    background:#293a34;
+}
+
+.monitoring-notice{
+    background:#111b18;
+    border-color:#294039;
+    border-left-color:#006F68;
+    color:#c2d2cb;
+}
+
+.monitoring-notice-icon{
+    color:#006F68;
+}
+
+.status-card{
+    background:#111816;
+    border-color:#293a34;
+    box-shadow:0 3px 14px rgba(0,0,0,.24);
+}
+
+.status-card:hover{
+    box-shadow:0 7px 22px rgba(0,0,0,.36);
+}
+
+.service-title{
+    color:#edf5f2;
+}
+
+.uptime span,
+.status-card.warning .uptime span,
+.status-card.error .uptime span,
+.status-card.maintenance .uptime span{
+    background:#293832;
+}
+
+.uptime-labels{
+    color:#91a39c;
+}
+
+.bar-tooltip{
+    background:#17221e;
+    color:#edf5f2;
+    border-color:#3b5148;
+    box-shadow:0 4px 14px rgba(0,0,0,.4);
+}
+
+footer{
+    color:#81938b;
+}
+
+.report-box{
+    background:#111816;
+    border-color:#293a34;
+    border-top-color:#006F68;
+}
+
+.report-box h3{
+    color:#55c9ad;
+}
+
+.report-box p{
+    color:#c2d2cb;
+}
+
+.close-btn{
+    color:#b8c9c2;
+}
+
+#noTempSystemMsg{
+    color:#b8c9c2;
+}
+
+
+
+/* 管理者向けデザイン（既存の表示内容・機能は変更しない） */
+:root{
+  --admin-bg:#080d0c;
+  --admin-panel:#111816;
+  --admin-panel-2:#17211e;
+  --admin-border:#263631;
+  --admin-text:#edf7f3;
+  --admin-muted:#9aada5;
+  --admin-mint:#65e6c1;
+}
+html,body{background:var(--admin-bg)!important;color:var(--admin-text)!important}
+body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Noto Sans JP",sans-serif}
+header,.header,.navbar,.topbar,nav{
+  background:#0b1210!important;
+  border-color:var(--admin-border)!important;
+}
+main,.container,.content,.main-content{color:var(--admin-text)}
+.status-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.status-card,.service-card,.card,.status-item,.system-card{
+  background:var(--admin-panel)!important;
+  color:var(--admin-text)!important;
+  border:1px solid var(--admin-border)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.18)!important;
+}
+h1,h2,h3,h4,.title,.service-name{color:var(--admin-text)!important}
+p,small,.description,.subtitle,.muted{color:var(--admin-muted)}
+input,select,textarea{
+  background:#0b1210!important;color:var(--admin-text)!important;
+  border:1px solid var(--admin-border)!important;border-radius:8px;
+}
+button,.btn,a.button{
+  border-radius:8px;
+}
+footer{color:#80938b!important;border-color:var(--admin-border)!important}
+@media(max-width:1050px){.status-grid{grid-template-columns:1fr!important}}
+
+
+/* 管理者専用・1画面表示 */
+html,body{
+  min-height:100%;
+  height:100%;
+  overflow-x:hidden;
+}
+body{
+  background:#080d0c!important;
+  color:#edf7f3!important;
+}
+header,nav,.menu-button,.mobile-menu,footer,
+.report-box,#reportBox,.access-consent,#accessConsent,
+.monitoring-notice{
+  display:none!important;
+}
+main{
+  width:100%;
+  max-width:none!important;
+  margin:0!important;
+  padding:16px 22px 18px!important;
+}
+.title{
+  color:#edf7f3!important;
+  font-size:25px!important;
+  line-height:1.1;
+  margin-bottom:4px!important;
+}
+.description{
+  color:#9aada5!important;
+  font-size:12px!important;
+  margin-bottom:10px!important;
+}
+.meta{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  gap:18px!important;
+  margin-bottom:12px!important;
+  font-size:11px!important;
+  color:#9aada5!important;
+}
+#system{color:#65e6c1!important}
+.status-heading{
+  color:#edf7f3!important;
+  font-size:17px!important;
+  gap:8px!important;
+  margin-bottom:12px!important;
+}
+.status-heading-icon svg{width:21px!important;height:21px!important}
+.status-heading::after,
+.system-section-title::after{background:#263631!important}
+.system-section{
+  margin-bottom:14px!important;
+}
+.system-section-title{
+  color:#dcebe5!important;
+  font-size:13px!important;
+  margin-bottom:9px!important;
+}
+.system-section-title::before{
+  width:6px!important;height:6px!important;background:#65e6c1!important;
+}
+.status-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+.status-card{
+  min-width:0!important;
+  padding:11px 13px 9px!important;
+  background:#111816!important;
+  color:#edf7f3!important;
+  border:1px solid #263631!important;
+  border-radius:10px!important;
+  box-shadow:none!important;
+}
+.status-card:hover{transform:none!important;box-shadow:none!important}
+.card-top{min-height:28px!important;gap:8px!important}
+.service-title{
+  color:#edf7f3!important;
+  font-size:13px!important;
+  gap:7px!important;
+}
+.service-icon,.service-icon svg{width:23px!important;height:23px!important}
+.service-status{
+  padding:5px 8px!important;
+  font-size:10px!important;
+}
+.status-dot{width:11px!important;height:11px!important;font-size:8px!important}
+.uptime{
+  gap:2px!important;
+  margin-top:10px!important;
+}
+.uptime span,
+.status-card.warning .uptime span,
+.status-card.error .uptime span,
+.status-card.maintenance .uptime span{
+  height:12px!important;
+}
+.uptime-labels{
+  margin-top:4px!important;
+  font-size:9px!important;
+}
+.status-card .new-badge{
+  top:4px!important;
+  left:10px!important;
+  font-size:9px!important;
+}
+#noTempSystemMsg{
+  color:#9aada5!important;
+  font-size:11px!important;
+}
+.bar-tooltip{
+  background:#17211e!important;
+  color:#edf7f3!important;
+  border-color:#365149!important;
+}
+@media(max-width:1050px){
+  main{padding:13px 15px!important}
+  .status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:600px){
+  .title{font-size:22px!important}
+  .meta{gap:8px!important;flex-wrap:wrap!important}
+  .status-grid{grid-template-columns:1fr!important}
+  .status-card{padding:10px 11px 8px!important}
+}
+
+
+/* 管理者用ステータス絞り込み */
+.admin-filter{
+  display:flex;align-items:center;flex-wrap:wrap;gap:7px;
+  margin:0 0 13px;padding:9px 11px;
+  background:#111816;border:1px solid #263631;border-radius:10px;
+}
+.admin-filter-label{font-size:11px;color:#9aada5;font-weight:700;margin-right:2px}
+.filter-button{
+  appearance:none;border:1px solid #34463f;background:#17211e;color:#c9d9d2;
+  border-radius:7px;padding:7px 11px;font-size:11px;font-weight:700;cursor:pointer;
+}
+.filter-button:hover{border-color:#65e6c1;color:#fff}
+.filter-button.active{background:#006F68;border-color:#65e6c1;color:#fff}
+.filter-count{margin-left:auto;color:#9aada5;font-size:10px}
+.filter-empty{
+  display:none;padding:18px;text-align:center;color:#9aada5;
+  border:1px dashed #34463f;border-radius:9px;font-size:12px;
+}
+.system-section.is-filter-empty{display:none!important}
+@media(max-width:600px){
+ .admin-filter{gap:6px}
+ .filter-button{padding:7px 9px}
+ .filter-count{width:100%;margin:2px 0 0}
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+<nav>
+
+<a href="index.html">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<path d="M3 11.5L12 4l9 7.5"/>
+<path d="M5 10.5V20h14v-9.5"/>
+<path d="M9 20v-6h6v6"/>
+</svg>
+</span>
+Home
+</a>
+
+<a href="about">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<circle cx="12" cy="8" r="3"/>
+<path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6"/>
+</svg>
+</span>
+About
+</a>
+
+<a href="projects">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<rect x="3" y="4" width="18" height="16" rx="2"/>
+<path d="M8 9l3 3-3 3"/>
+<path d="M13 15h4"/>
+</svg>
+</span>
+Projects
+</a>
+
+<a href="videos">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="9"/>
+<path d="M10 8l6 4-6 4z"/>
+</svg>
+</span>
+License
+</a>
+
+<a href="news">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<path d="M4 5h16v14H4z"/>
+<path d="M7 8h10"/>
+<path d="M7 12h10"/>
+<path d="M7 16h6"/>
+</svg>
+</span>
+News
+</a>
+
+<a href="documents">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<path d="M6 3h9l4 4v14H6z"/>
+<path d="M14 3v5h5"/>
+<path d="M9 13h6"/>
+<path d="M9 17h6"/>
+</svg>
+</span>
+Documents
+</a>
+
+<a href="link">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.2 1.2"/>
+<path d="M14 11a5 5 0 0 0-7.1-.1l-2 2a5 5 0 0 0 7.1 7.1l1.2-1.2"/>
+</svg>
+</span>
+Link
+</a>
+
+<a href="status">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<path d="M4 19V9"/>
+<path d="M10 19V5"/>
+<path d="M16 19v-7"/>
+<path d="M22 19V3"/>
+</svg>
+</span>
+Status
+</a>
+
+<a href="qa">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<path d="M4 5h16v12H4z"/>
+<path d="M8 9h8"/>
+<path d="M8 13h5"/>
+<path d="M7 17l-2 4 5-4"/>
+</svg>
+</span>
+Q&amp;A
+</a>
+
+<a href="contact">
+<span class="icon">
+<svg viewBox="0 0 24 24">
+<rect x="3" y="5" width="18" height="14" rx="2"/>
+<path d="M3 7l9 6 9-6"/>
+</svg>
+</span>
+Contact
+</a>
+
+</nav>
+
+
+<!-- モバイルメニューボタン -->
+
+<button
+class="menu-button"
+id="menuButton"
+aria-label="メニュー"
+aria-expanded="false"
+>
+
+<span class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</span>
+
+<span class="menu-text">
+MENU
+</span>
+
+</button>
+
+
+<!-- モバイルメニュー -->
+
+<div
+class="mobile-menu"
+id="mobileMenu"
+>
+
+<a href="index.html">Home</a>
+<a href="about">About</a>
+<a href="projects">Projects</a>
+<a href="videos">License</a>
+<a href="news">News</a>
+<a href="documents">Documents</a>
+<a href="link">Link</a>
+<a href="status">Status</a>
+<a href="qa">Q&amp;A</a>
+<a href="contact">Contact</a>
+
+</div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+
+<div class="monitoring-notice" role="note">
+    <span class="monitoring-notice-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 8v5"/>
+            <path d="M12 16h.01"/>
+        </svg>
+    </span>
+    <div>
+        システムに接続できるかどうかを定点観測したデータを表示しています。システムが部分的に動作しないなどの障害は検知できない可能性があります。
+    </div>
+</div>
+
+
+<div class="meta">
+
+<div id="system">
+稼働状況を読み込み中
+</div>
+
+<div>
+最終更新：
+<span id="sync">--:--:--</span>
+</div>
+
+</div>
+
+
+<div class="admin-filter" aria-label="表示するサービスの絞り込み">
+  <span class="admin-filter-label">表示：</span>
+  <button type="button" class="filter-button active" data-filter="all">すべて</button>
+  <button type="button" class="filter-button" data-filter="issues">障害・メンテナンス</button>
+  <button type="button" class="filter-button" data-filter="error">接続不可</button>
+  <button type="button" class="filter-button" data-filter="warning">混雑</button>
+  <span id="filterCount" class="filter-count"></span>
+</div>
+
+<!-- =========================
+     システム稼働状況
+========================= -->
+
+<div class="status-heading">
+
+<span class="status-heading-icon">
+
+<svg viewBox="0 0 32 32">
+<path d="M2 17h6l3-10 5 18 4-14 3 6h7"/>
+</svg>
+
+</span>
+
+システム稼働状況
+
+</div>
+
+
+<!-- =====================================================
+     臨時システム
+===================================================== -->
+
+<section class="system-section">
+
+<div class="system-section-title">
+臨時システム
+</div>
+
+<h5 id="noTempSystemMsg">現在臨時システムは立ち上げられていません。</h5>
+
+<div class="status-grid" id="tempSystemGrid" style="display:none;"></div>
+
+</section>
+
+
+<!-- =====================================================
+     通常システム
+===================================================== -->
+
+<section class="system-section">
+
+<div class="system-section-title">
+通常システム
+</div>
+
+<div class="status-grid" id="normalSystemGrid"></div>
+
+</section>
+
+
+</main>
+
+
+<!-- バーのホバー時に表示される吹き出し -->
+<div id="barTooltip" class="bar-tooltip"></div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+© BAINARI
+</footer>
+
+
+<!-- =========================
+     REPORT BOX
+========================= -->
+
+<div
+id="reportBox"
+class="report-box"
+>
+
+
+<button
+class="close-btn"
+onclick="closeReport()"
+>
+✕
+</button>
+
+
+<h3>
+⚠️ 不具合を発見しましたか？
+</h3>
+
+
+<p>
+サービスに問題や表示の不具合を見つけた場合は、
+Googleフォームからご報告ください。
+</p>
+
+
+<a
+href="https://forms.gle/kRhMupMydqeaiFa98"
+target="_blank"
+rel="noopener noreferrer"
+class="report-btn"
+>
+不具合を報告する
+</a>
+
+
+</div>
+
+
+<!-- =========================
+     ACCESS NOTICE
+========================= -->
+
+<div
+class="access-consent"
+id="accessConsent"
+>
+
+
+<div class="access-consent-text">
+
+このサイトでは、
+アクセス日時・ページURL・端末・OS・ブラウザ等の
+アクセス情報を記録しています。
+
+</div>
+
+
+<button
+type="button"
+id="accessConsentButton"
+>
+OK
+</button>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   MENU
+===================================================== */
+
+const menuButton =
+document.getElementById(
+    "menuButton"
+);
+
+const mobileMenu =
+document.getElementById(
+    "mobileMenu"
+);
+
+
+menuButton.addEventListener(
+"click",
+function(){
+
+    mobileMenu.classList.toggle(
+        "active"
+    );
+
+    menuButton.classList.toggle(
+        "active"
+    );
+
+    menuButton.setAttribute(
+        "aria-expanded",
+        mobileMenu.classList.contains(
+            "active"
+        )
+    );
+
+});
+
+
+document.addEventListener(
+"click",
+function(event){
+
+    if(
+        !mobileMenu.contains(
+            event.target
+        ) &&
+        !menuButton.contains(
+            event.target
+        )
+    ){
+
+        mobileMenu.classList.remove(
+            "active"
+        );
+
+        menuButton.classList.remove(
+            "active"
+        );
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+});
+
+
+/* =====================================================
+   BAR TOOLTIP (マウスオーバー/タップで即座に何時何分を表示)
+===================================================== */
+
+const barTooltip = document.getElementById("barTooltip");
+
+function showBarTooltip(e, text){
+    if(!barTooltip || !text) return;
+    barTooltip.textContent = text;
+    barTooltip.style.display = "block";
+    moveBarTooltip(e);
+}
+
+function moveBarTooltip(e){
+    if(!barTooltip || barTooltip.style.display === "none") return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    const tooltipWidth = barTooltip.offsetWidth || 180;
+    const half = tooltipWidth / 2;
+    let left = clientX;
+    if(left - half < 10) left = half + 10;
+    if(left + half > window.innerWidth - 10) left = window.innerWidth - half - 10;
+
+    barTooltip.style.left = left + "px";
+    barTooltip.style.top = clientY + "px";
+}
+
+function hideBarTooltip(){
+    if(barTooltip){
+        barTooltip.style.display = "none";
+    }
+}
+
+document.addEventListener("mouseover", function(e){
+    const bar = e.target.closest(".uptime span");
+    if(bar && bar.dataset.tip){
+        showBarTooltip(e, bar.dataset.tip);
+    }
+});
+
+document.addEventListener("mousemove", function(e){
+    if(barTooltip && barTooltip.style.display === "block"){
+        moveBarTooltip(e);
+    }
+});
+
+document.addEventListener("mouseout", function(e){
+    const bar = e.target.closest(".uptime span");
+    if(bar){
+        hideBarTooltip();
+    }
+});
+
+document.addEventListener("touchstart", function(e){
+    const bar = e.target.closest(".uptime span");
+    if(bar && bar.dataset.tip){
+        showBarTooltip(e, bar.dataset.tip);
+    } else {
+        hideBarTooltip();
+    }
+}, { passive: true });
+
+
+/* =====================================================
+   STATUS JSON
+===================================================== */
+
+const STATUS_JSON_URL = "https://script.google.com/macros/s/AKfycbwOJATEtUjlnDH0ufn1ypC4NJwjCtcmFlDanMp5Qwgg2Cc4aY9g8n3Si_oLkUVErP5QaA/exec";
+
+
+/* =====================================================
+   SERVICE ICONS
+===================================================== */
+
+function getServiceIcon(key){
+
+    const icons = {
+
+        stockServer: `<span class="service-icon icon-server"><svg viewBox="0 0 32 32"><rect x="5" y="5" width="22" height="8" rx="2"/><rect x="5" y="19" width="22" height="8" rx="2"/><path d="M9 9h.1M9 23h.1M14 9h9M14 23h9"/></svg></span>`,
+
+        waterlog: `<span class="service-icon icon-water"><svg viewBox="0 0 32 32"><path d="M16 4s-8 9-8 15a8 8 0 0 0 16 0c0-6-8-15-8-15z"/></svg></span>`,
+
+        calendar: `<span class="service-icon icon-calendar"><svg viewBox="0 0 32 32"><rect x="4" y="7" width="24" height="21" rx="3"/><path d="M9 4v7M23 4v7M4 13h24"/><path d="M9 18h3M16 18h3M23 18h3"/><path d="M9 23h3M16 23h3"/></svg></span>`,
+
+        timer: `<span class="service-icon icon-timer"><svg viewBox="0 0 32 32"><circle cx="16" cy="17" r="11"/><path d="M16 10v8l5 3"/><path d="M12 3h8"/></svg></span>`,
+
+        digitalCard: `<span class="service-icon icon-card"><svg viewBox="0 0 32 32"><path d="M8 28V11l8-6 8 6v17z"/><path d="M11 15h10"/><path d="M11 20h10"/><path d="M11 25h6"/></svg></span>`,
+
+        kabu: `<span class="service-icon icon-stock"><svg viewBox="0 0 32 32"><path d="M5 27V18"/><path d="M14 27V12"/><path d="M23 27V6"/><path d="M4 11l7-5 6 4 10-7"/><path d="M22 3h5v5"/></svg></span>`,
+
+        rinzikabu: `<span class="service-icon icon-stock"><svg viewBox="0 0 32 32"><path d="M5 27V18"/><path d="M14 27V12"/><path d="M23 27V6"/><path d="M4 11l7-5 6 4 10-7"/><path d="M22 3h5v5"/></svg></span>`,
+
+        password: `<span class="service-icon icon-password"><svg viewBox="0 0 32 32"><rect x="7" y="14" width="18" height="14" rx="3"/><path d="M11 14V10a5 5 0 0 1 10 0v4"/><path d="M16 20v4"/></svg></span>`
+
+    };
+
+    return icons[key] || `<span class="service-icon icon-server"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"/><path d="M5 16h22M16 5a15 15 0 0 1 0 22M16 5a15 15 0 0 0 0 22"/></svg></span>`;
+
+}
+
+
+/* =====================================================
+   STATUS INFO
+===================================================== */
+
+function getStatusInfo(statusText){
+
+    const status = String(statusText || "").trim();
+
+    if(status === "稼働中"){
+        return { text:"稼働中", className:"normal", symbol:"✓" };
+    }
+    if(status === "メンテナンス中"){
+        return { text:"メンテナンス中", className:"maintenance", symbol:"!" };
+    }
+    if(status === "接続不可"){
+        return { text:"接続不可", className:"error", symbol:"×" };
+    }
+    if(status === "混雑"){
+        return { text:"混雑", className:"warning", symbol:"!" };
+    }
+
+    return { text: status || "状態不明", className:"warning", symbol:"!" };
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value){
+    return String(value).replace(/[&<>"']/g, function(char){
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+
+/* =====================================================
+   CREATE SERVICE CARD
+===================================================== */
+
+function createServiceCard(item){
+
+    const result = getStatusInfo(item.status);
+    const card = document.createElement("article");
+
+    card.className =
+        "status-card" +
+        (result.className !== "normal" ? ` ${result.className}` : "");
+
+    card.dataset.key = item.key;
+
+    const badgeHtml = item.isTemporary
+        ? `<span class="new-badge">NEW</span>`
+        : (item.isNew ? `<span class="new-badge">NEW</span>` : "");
+
+    // JSONにurlが含まれていても、サービス名はリンクにせず通常の文字として表示
+    const titleHtml = escapeHtml(item.name || "名称未設定");
+
+    const history = Array.isArray(item.history) ? item.history : [];
+    const offset = 36 - history.length;
+    let barsHtml = "";
+
+    for(let i = 0; i < 36; i++){
+        if(i < offset){
+            barsHtml += `<span data-tip="計測データなし"></span>`;
+        } else {
+            const entry = history[i - offset];
+            const hStatus = typeof entry === "object" ? entry.status : entry;
+            const hTime = typeof entry === "object" && entry.time ? `${entry.time} - ` : "";
+            const info = getStatusInfo(hStatus);
+            const tipText = `${hTime}${hStatus}`;
+            barsHtml += `<span class="${info.className}" data-tip="${tipText}"></span>`;
+        }
+    }
+
+    let leftLabel = "約3時間前";
+    if(history.length > 0 && typeof history[0] === "object" && history[0].time){
+        const parts = history[0].time.split(" ");
+        leftLabel = parts.length > 1 ? parts[1].slice(0, 5) + "頃" : history[0].time;
+    }
+
+    card.innerHTML = `
+        ${badgeHtml}
+        <div class="card-top">
+            <div class="service-title">
+                ${getServiceIcon(item.key)}
+                <span>${titleHtml}</span>
+            </div>
+            <div class="service-status">
+                <span class="status-dot">${result.symbol}</span>
+                ${result.text}
+            </div>
+        </div>
+        <div class="uptime">${barsHtml}</div>
+        <div class="uptime-labels">
+            <span>${leftLabel}</span>
+            <span>現在</span>
+        </div>
+    `;
+
+    return card;
+
+}
+
+
+/* =====================================================
+   ADMIN FILTER
+===================================================== */
+
+let adminStatusFilter = "all";
+let adminServices = [];
+
+function matchesAdminFilter(item){
+    const status = String(item.status || "").trim();
+    if(adminStatusFilter === "all") return true;
+    if(adminStatusFilter === "issues"){
+        return status === "接続不可" || status === "メンテナンス中" || status === "混雑";
+    }
+    if(adminStatusFilter === "error") return status === "接続不可";
+    if(adminStatusFilter === "warning") return status === "混雑";
+    return true;
+}
+
+function renderAdminServices(){
+    const tempGrid = document.getElementById("tempSystemGrid");
+    const noTempMsg = document.getElementById("noTempSystemMsg");
+    const normalGrid = document.getElementById("normalSystemGrid");
+    const tempSection = tempGrid.closest(".system-section");
+    const normalSection = normalGrid.closest(".system-section");
+
+    tempGrid.innerHTML = "";
+    normalGrid.innerHTML = "";
+
+    const filtered = adminServices.filter(matchesAdminFilter);
+    let tempCount = 0;
+    let normalCount = 0;
+
+    filtered.forEach(function(item){
+        const card = createServiceCard(item);
+        if(item.isTemporary){
+            tempGrid.appendChild(card);
+            tempCount++;
+        } else {
+            normalGrid.appendChild(card);
+            normalCount++;
+        }
+    });
+
+    tempGrid.style.display = tempCount > 0 ? "grid" : "none";
+    noTempMsg.style.display = adminStatusFilter === "all" && tempCount === 0 ? "block" : "none";
+    tempSection.classList.toggle("is-filter-empty", tempCount === 0 && adminStatusFilter !== "all");
+    normalSection.classList.toggle("is-filter-empty", normalCount === 0);
+
+    let empty = document.getElementById("adminFilterEmpty");
+    if(!empty){
+        empty = document.createElement("div");
+        empty.id = "adminFilterEmpty";
+        empty.className = "filter-empty";
+        document.querySelector(".admin-filter").after(empty);
+    }
+    empty.textContent = "選択した条件に該当するサービスはありません。";
+    empty.style.display = filtered.length === 0 ? "block" : "none";
+
+    document.getElementById("filterCount").textContent =
+        `${filtered.length} / ${adminServices.length} 件表示`;
+}
+
+document.querySelectorAll(".filter-button").forEach(function(button){
+    button.addEventListener("click",function(){
+        adminStatusFilter = button.dataset.filter;
+        document.querySelectorAll(".filter-button").forEach(function(b){
+            b.classList.toggle("active",b === button);
+        });
+        renderAdminServices();
+    });
+});
+
+/* =====================================================
+   LOAD STATUS
+===================================================== */
+
+async function loadStatus(){
+
+    const systemElement = document.getElementById("system");
+    const syncElement = document.getElementById("sync");
+    const tempGrid = document.getElementById("tempSystemGrid");
+    const noTempMsg = document.getElementById("noTempSystemMsg");
+    const normalGrid = document.getElementById("normalSystemGrid");
+
+    try{
+
+        const response = await fetch(
+            STATUS_JSON_URL + "?t=" + Date.now(),
+            {
+                method:"GET",
+                cache:"no-store"
+            }
+        );
+
+        if(!response.ok){
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        systemElement.textContent =
+            data.system || "システム稼働状況を取得済み";
+
+        syncElement.textContent =
+            data.updatedAt || new Date().toLocaleTimeString("ja-JP");
+
+        adminServices = Array.isArray(data.services) ? data.services : [];
+        renderAdminServices();
+
+    }
+    catch(error){
+
+        console.error("ステータス読み込みエラー:", error);
+
+        systemElement.textContent =
+            "稼働状況を読み込めません";
+
+        syncElement.textContent =
+            "読み込みエラー";
+
+    }
+
+}
+
+
+/* =====================================================
+   START STATUS
+===================================================== */
+
+loadStatus();
+
+setInterval(
+    loadStatus,
+    30000
+);
+
+
+/* =====================================================
+   REPORT BOX
+===================================================== */
+
+function closeReport(){
+
+    const box =
+        document.getElementById(
+            "reportBox"
+        );
+
+    if(box){
+
+        box.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   ACCESS LOG
+===================================================== */
+
+(function(){
+
+    const FORM_URL =
+        "https://docs.google.com/forms/d/e/1FAIpQLSccfR4g1Ytnzr0aLv31R3NkjUWRmaaD6YwQnjNYF0d60Uexmg/formResponse";
+
+    function getDevice(){
+
+        const width =
+            window.innerWidth;
+
+        if(width <= 700){
+            return "スマートフォン";
+        }
+
+        if(width <= 1100){
+            return "タブレット";
+        }
+
+        return "PC";
+
+    }
+
+    function getOS(){
+
+        const ua =
+            navigator.userAgent;
+
+        if(/Android/i.test(ua)){
+            return "Android";
+        }
+        if(/iPhone|iPad|iPod/i.test(ua)){
+            return "iOS / iPadOS";
+        }
+        if(/Windows/i.test(ua)){
+            return "Windows";
+        }
+        if(/Mac OS X/i.test(ua)){
+            return "macOS";
+        }
+        if(/CrOS/i.test(ua)){
+            return "ChromeOS";
+        }
+        if(/Linux/i.test(ua)){
+            return "Linux";
+        }
+
+        return "その他 / 不明";
+
+    }
+
+    function getBrowser(){
+
+        const ua =
+            navigator.userAgent;
+
+        if(/Edg\//i.test(ua)){
+            return "Microsoft Edge";
+        }
+        if(/OPR\//i.test(ua)){
+            return "Opera";
+        }
+        if(/Chrome\//i.test(ua) && !/Edg\//i.test(ua)){
+            return "Google Chrome";
+        }
+        if(/Firefox\//i.test(ua)){
+            return "Firefox";
+        }
+        if(/Safari\//i.test(ua) && !/Chrome\//i.test(ua)){
+            return "Safari";
+        }
+
+        return "その他 / 不明";
+
+    }
+
+    function sendAccessLog(){
+
+        const now =
+            new Date();
+
+        const params =
+            new URLSearchParams();
+
+        params.set(
+            "entry.1390942320",
+            now.toLocaleString(
+                "ja-JP",
+                { timeZone:"Asia/Tokyo" }
+            )
+        );
+
+        params.set(
+            "entry.600562719",
+            location.href
+        );
+
+        params.set(
+            "entry.32786128",
+            document.title
+        );
+
+        params.set(
+            "entry.318452337",
+            getDevice()
+        );
+
+        params.set(
+            "entry.1152326462",
+            getOS()
+        );
+
+        params.set(
+            "entry.777710718",
+            getBrowser()
+        );
+
+        const iframe =
+            document.createElement("iframe");
+
+        iframe.name =
+            "accessLog_" + Date.now();
+
+        iframe.style.display =
+            "none";
+
+        document.body.appendChild(iframe);
+
+        const form =
+            document.createElement("form");
+
+        form.method = "GET";
+        form.action = FORM_URL;
+        form.target = iframe.name;
+        form.style.display = "none";
+
+        params.forEach(function(value,key){
+
+            const input =
+                document.createElement("input");
+
+            input.type = "hidden";
+            input.name = key;
+            input.value = value;
+
+            form.appendChild(input);
+
+        });
+
+        document.body.appendChild(form);
+
+        form.submit();
+
+    }
+
+    function setupNotice(){
+
+        const notice =
+            document.getElementById("accessConsent");
+
+        const button =
+            document.getElementById("accessConsentButton");
+
+        if(!notice || !button){
+            return;
+        }
+
+        button.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            notice.remove();
+
+            try{
+                sessionStorage.setItem(
+                    "accessNoticeAccepted",
+                    "1"
+                );
+            }
+            catch(error){}
+
+        });
+
+        try{
+            if(
+                sessionStorage.getItem(
+                    "accessNoticeAccepted"
+                ) === "1"
+            ){
+                notice.remove();
+            }
+        }
+        catch(error){}
+
+    }
+
+    function start(){
+        setupNotice();
+        sendAccessLog();
+    }
+
+    if(document.readyState === "loading"){
+        document.addEventListener(
+            "DOMContentLoaded",
+            start,
+            { once:true }
+        );
+    } else {
+        start();
+    }
+
+})();
+
+</script>
+
+</body>
+</html>
