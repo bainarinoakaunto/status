@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1210">
+<title>BAINARI｜メンテナンス情報</title>
+<style>
+:root{color-scheme:dark;--bg:#080d0c;--panel:#111816;--panel2:#17211e;--line:#293a34;--text:#edf7f3;--muted:#9aada5;--mint:#65e6c1;--blue:#7eb8ee}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Noto Sans JP",sans-serif}
+a{color:inherit}
+header{height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(22px,calc((100% - 1180px)/2));background:#0b1210}
+.brand{font-size:18px;font-weight:850;letter-spacing:.08em}
+.brand span{color:var(--mint)}
+.header-label{font-size:12px;color:var(--muted)}
+main{max-width:1180px;margin:0 auto;padding:44px 22px 70px}
+.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--mint);font-weight:800}
+h1{font-size:clamp(27px,4vw,38px);margin:9px 0 8px;letter-spacing:.01em}
+.lead{margin:0;color:var(--muted);line-height:1.8;font-size:14px}
+.status-panel{margin:28px 0 32px;padding:19px 22px;border:1px solid var(--line);border-left:4px solid var(--mint);border-radius:12px;background:var(--panel);display:flex;align-items:center;gap:14px}
+.status-icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#15382e;color:var(--mint);font-size:18px;flex:none}
+.status-copy{min-width:0}
+.status-title{font-weight:800;font-size:15px}
+.status-message{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.6}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:34px 0 15px}
+.section-head h2{font-size:20px;margin:0}
+.month-controls{display:flex;align-items:center;gap:8px}
+.month-controls button,.refresh-button{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:8px;padding:9px 12px;cursor:pointer;font:inherit}
+.month-controls button:hover,.refresh-button:hover{border-color:var(--mint)}
+#monthLabel{font-weight:800;min-width:116px;text-align:center}
+.calendar{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel);display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.weekday{padding:12px 6px;text-align:center;font-size:12px;color:var(--muted);font-weight:800;background:#0e1713;border-bottom:1px solid var(--line)}
+.weekday:first-child{color:#e69b9b}.weekday:last-child{color:#8eb8e7}
+.day{min-height:116px;padding:9px 8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.day:nth-child(7n){border-right:0}
+.day.outside{background:#0c1311;color:#53635c}
+.day.today{background:#13251e;box-shadow:inset 0 0 0 1px #397b65}
+.day-number{font-size:12px;font-weight:800;color:#c5d2cc}
+.day.today .day-number{color:var(--mint)}
+.day-events{display:grid;gap:5px;margin-top:8px}
+.event{display:block;width:100%;border:0;border-left:3px solid var(--blue);border-radius:5px;background:#1a2b39;color:#d9eafa;text-align:left;padding:6px 7px;font-size:11px;line-height:1.4;cursor:pointer;overflow:hidden;text-overflow:ellipsis}
+.event.in_progress{border-left-color:#f5bd62;background:#392e1c;color:#ffe3b0}
+.event.completed{border-left-color:#65c99c;background:#173328;color:#c3f2d9}
+.event.cancelled{border-left-color:#87918c;background:#252b28;color:#c1c8c4}
+.event.delayed{border-left-color:#e68181;background:#382222;color:#ffd0d0}
+.event-time{display:block;opacity:.8;font-size:10px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:13px;color:var(--muted);font-size:11px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.legend .l-progress{background:#f5bd62}.legend .l-done{background:#65c99c}.legend .l-delay{background:#e68181}
+.details{margin-top:28px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:20px 22px;min-height:120px}
+.details h2{font-size:17px;margin:0 0 12px}
+.detail-empty{color:var(--muted);font-size:13px;line-height:1.7}
+.detail-title{font-size:18px;font-weight:800;margin:0 0 10px}
+.detail-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.pill{font-size:11px;padding:5px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+.detail-body{font-size:13px;color:#c5d2cc;line-height:1.8;white-space:pre-wrap}
+.notices{margin-top:30px}
+.notices h2{font-size:19px}
+.notice{padding:14px 0;border-bottom:1px solid var(--line)}
+.notice-title{font-size:14px;font-weight:800}
+.notice-date{font-size:11px;color:var(--muted);margin-top:5px}
+.notice-body{font-size:13px;color:#c5d2cc;line-height:1.7;margin-top:7px}
+footer{border-top:1px solid var(--line);padding:22px;text-align:center;color:#74867e;font-size:11px}
+#updated{color:var(--muted);font-size:11px}
+.loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:18px 0}
+.spinner{width:16px;height:16px;border:2px solid #365148;border-top-color:var(--mint);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{color:#f2a3a3}
+@media(max-width:700px){
+ header{height:58px;padding:0 16px}.header-label{font-size:10px}
+ main{padding:30px 12px 48px}
+ .status-panel{padding:15px;margin:22px 0 26px}
+ .section-head{align-items:flex-start;flex-direction:column}
+ .day{min-height:88px;padding:6px 4px}
+ .weekday{font-size:10px;padding:10px 2px}
+ .day-number{font-size:11px}
+ .event{font-size:9px;padding:5px 4px;border-left-width:2px}
+ .event-time{font-size:9px}
+ .calendar{border-radius:9px}
+ .details{padding:17px 15px}
+}
+@media(max-width:390px){.day{min-height:76px}.event{font-size:8px}.event-time{font-size:8px}}
+</style>
+</head>
+<body>
+<header><div class="brand">BAINA<span>RI</span></div><div class="header-label">SERVICE INFORMATION</div></header>
+<main>
+  <div class="eyebrow">BAINARI / MAINTENANCE</div>
+  <h1>メンテナンス情報</h1>
+  <p class="lead">BAINARI関連サービスのメンテナンス予定・実施状況をお知らせします。</p>
+
+  <section class="status-panel" aria-live="polite">
+    <div class="status-icon" id="statusIcon">✓</div>
+    <div class="status-copy"><div class="status-title" id="statusTitle">稼働状況を確認しています</div><div class="status-message" id="statusMessage">最新情報を読み込んでいます。</div></div>
+  </section>
+
+  <div class="section-head">
+    <div><h2>メンテナンスカレンダー</h2><div id="updated" style="margin-top:6px">最終更新：読み込み中</div></div>
+    <div class="month-controls"><button id="prevMonth" aria-label="前の月">‹</button><div id="monthLabel"></div><button id="nextMonth" aria-label="次の月">›</button><button class="refresh-button" id="refresh">更新</button></div>
+  </div>
+
+  <div id="loading" class="loading"><span class="spinner"></span>メンテナンス情報を読み込んでいます…</div>
+  <div class="calendar" id="calendar" aria-label="月間カレンダー" hidden></div>
+  <div class="legend"><span><i></i>予定</span><span><i class="l-progress"></i>実施中</span><span><i class="l-done"></i>完了</span><span><i class="l-delay"></i>延期</span></div>
+
+  <section class="details" id="details"><h2>予定の詳細</h2><div class="detail-empty">カレンダー内の予定を選択すると、詳細を確認できます。</div></section>
+  <section class="notices"><h2>お知らせ</h2><div id="notices"><div class="detail-empty">お知らせはありません。</div></div></section>
+</main>
+<footer>© BAINARI. All rights reserved. <span id="footerVersion"></span></footer>
+<script>
+const JSON_URL = "https://raw.githubusercontent.com/bainarinoakaunto/status/main/maintenance.json";
+const WEEKDAYS = ["日","月","火","水","木","金","土"];
+let appData = null;
+let viewDate = new Date();
+viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
+const $ = id => document.getElementById(id);
+const safe = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const parseLocalDate = value => {const [y,m,d] = String(value).split("-").map(Number);return new Date(y,m-1,d)};
+const todayKey = () => {const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function statusLabel(status){return (appData?.statusTypes?.[status]?.label)||({scheduled:"予定",in_progress:"実施中",completed:"完了",cancelled:"中止",delayed:"延期"}[status]||"予定")}
+function eventsFor(date){const key=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");return (appData?.maintenance||[]).filter(x=>x.date===key)}
+function renderCalendar(){
+ const cal=$("calendar");cal.innerHTML="";
+ WEEKDAYS.forEach((w,i)=>{const el=document.createElement("div");el.className="weekday";el.textContent=w;cal.appendChild(el)});
+ const first=new Date(viewDate.getFullYear(),viewDate.getMonth(),1);
+ const start=new Date(first);start.setDate(1-first.getDay());
+ const monthLabel=viewDate.toLocaleDateString("ja-JP",{year:"numeric",month:"long"});
+ $("monthLabel").textContent=monthLabel;
+ for(let i=0;i<42;i++){
+  const date=new Date(start);date.setDate(start.getDate()+i);
+  const cell=document.createElement("div");
+  const isCurrent=date.getMonth()===viewDate.getMonth();
+  const key=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+  cell.className="day"+(!isCurrent?" outside":"")+(key===todayKey()?" today":"");
+  const num=document.createElement("div");num.className="day-number";num.textContent=date.getDate();cell.appendChild(num);
+  const list=document.createElement("div");list.className="day-events";
+  eventsFor(date).forEach(item=>{
+   const b=document.createElement("button");b.className="event "+(item.status||"scheduled");b.type="button";
+   b.innerHTML=safe(item.title||"メンテナンス")+"<span class='event-time'>"+safe(item.startTime||"")+" "+(item.endTime?"– "+safe(item.endTime):"")+"</span>";
+   b.addEventListener("click",()=>showDetails(item));list.appendChild(b);
+  });
+  cell.appendChild(list);cal.appendChild(cell);
+ }
+ cal.hidden=false;
+}
+function showDetails(item){
+ const services=Array.isArray(item.services)?item.services.join("、"):item.services||"指定なし";
+ $("details").innerHTML="<h2>予定の詳細</h2><div class='detail-title'>"+safe(item.title||"メンテナンス")+"</div><div class='detail-meta'><span class='pill'>"+safe(item.date)+"</span><span class='pill'>"+safe(item.startTime||"時刻未定")+" – "+safe(item.endTime||"未定")+"</span><span class='pill'>"+safe(statusLabel(item.status))+"</span></div><div class='detail-body'>対象サービス："+safe(services)+"\n"+safe(item.description||"詳細情報はありません。")+"\n影響："+safe(item.impact||"記載なし")+"</div>";
+}
+function renderNotices(){
+ const list=Array.isArray(appData?.notices)?appData.notices:[];
+ $("notices").innerHTML=list.length?list.map(n=>"<article class='notice'><div class='notice-title'>"+safe(n.title||"お知らせ")+"</div><div class='notice-date'>"+safe(n.date||"")+"</div><div class='notice-body'>"+safe(n.message||n.description||"")+"</div></article>").join(""):"<div class='detail-empty'>現在、お知らせはありません。</div>";
+}
+async function loadData(){
+ $("loading").hidden=false;$("loading").innerHTML="<span class='spinner'></span>メンテナンス情報を読み込んでいます…";
+ try{
+  const response=await fetch(JSON_URL+"?t="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const data=await response.json();
+  if(!Array.isArray(data.maintenance))throw new Error("JSONのmaintenance形式が正しくありません");
+  appData=data;
+  const status=data.status||{};
+  $("statusTitle").textContent=status.overall==="operational"?"現在、通常稼働中です":status.overall==="maintenance"?"メンテナンスを実施しています":status.overall==="degraded"?"一部サービスに影響が発生しています":"稼働状況";
+  $("statusMessage").textContent=status.message||"最新のメンテナンス情報を表示しています。";
+  $("statusIcon").textContent=status.overall==="operational"?"✓":"!";
+  $("updated").textContent="最終更新："+(data.updatedAt||"日時情報なし")+" ／ 自動更新："+Math.round((data.settings?.refreshInterval||60000)/1000)+"秒";
+  $("footerVersion").textContent=" / v"+(data.version||"1.0");
+  $("loading").hidden=true;renderCalendar();renderNotices();
+ }catch(error){
+  console.error(error);$("loading").innerHTML="<span class='error'>情報を読み込めませんでした。通信状態またはGitHub上のJSONを確認してください。</span>";
+  $("statusTitle").textContent="情報を取得できません";$("statusMessage").textContent="しばらくしてから再読み込みしてください。";
+ }
+}
+$("prevMonth").addEventListener("click",()=>{viewDate.setMonth(viewDate.getMonth()-1);if(appData)renderCalendar()});
+$("nextMonth").addEventListener("click",()=>{viewDate.setMonth(viewDate.getMonth()+1);if(appData)renderCalendar()});
+$("refresh").addEventListener("click",loadData);
+loadData();
+setInterval(()=>{if(appData?.settings?.autoRefresh!==false)loadData()},60000);
+</script>
+</body>
+</html>
