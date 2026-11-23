@@ -1,0 +1,43 @@
+{
+  "system": "BAINARI Maintenance Information",
+  "version": "1.0.0",
+  "timezone": "Asia/Tokyo",
+  "updatedAt": "2026-11-23T22:00:00+09:00",
+  "settings": {
+    "calendarView": "month",
+    "weekStartsOn": "sunday",
+    "showPastMaintenance": true,
+    "showCompletedMaintenance": true,
+    "autoRefresh": true,
+    "refreshInterval": 60000
+  },
+  "status": {
+    "overall": "operational",
+    "message": "現在、予定されているメンテナンスはありません",
+    "updatedAt": "2026-11-23T22:00:00+09:00"
+  },
+  "maintenance": [],
+  "notices": [],
+  "statusTypes": {
+    "scheduled": {
+      "label": "予定",
+      "color": "#2563eb"
+    },
+    "in_progress": {
+      "label": "実施中",
+      "color": "#f59e0b"
+    },
+    "completed": {
+      "label": "完了",
+      "color": "#16a34a"
+    },
+    "cancelled": {
+      "label": "中止",
+      "color": "#6b7280"
+    },
+    "delayed": {
+      "label": "延期",
+      "color": "#dc2626"
+    }
+  }
+}
