@@ -157,16 +157,37 @@ function renderNotices(){
 }
 async function loadLiveStatus(){
  try{
-  const response=await fetch(STATUS_JSON_URL+"?t="+Date.now(),{cache:"no-store"});
+  const response=await fetch(STATUS_JSON_URL+"?t="+Date.now(),{
+   method:"GET",
+   cache:"no-store"
+  });
   if(!response.ok)throw new Error("HTTP "+response.status);
   const data=await response.json();
   const services=Array.isArray(data.services)?data.services:[];
-  const maintenance=services.filter(s=>s.status==="メンテナンス中");
-  const issues=services.filter(s=>s.status==="接続不可"||s.status==="混雑");
-  if(maintenance.length){$("statusTitle").textContent="現在メンテナンス中のサービスがあります";$("statusIcon").textContent="!";$("statusMessage").textContent=maintenance.map(s=>s.name+"：メンテナンス中").join(" ／ ");}
-  else if(issues.length){$("statusTitle").textContent="一部サービスに影響があります";$("statusIcon").textContent="!";$("statusMessage").textContent=issues.map(s=>s.name+"："+s.status).join(" ／ ");}
-  else{$("statusTitle").textContent=data.system||"現在の稼働状況";$("statusIcon").textContent="✓";$("statusMessage").textContent="STATUSページと同じ取得元から取得 ／ 更新："+(data.updatedAt||"日時情報なし");}
- }catch(error){console.error("STATUS取得エラー",error);$("statusTitle").textContent="稼働状況を取得できません";$("statusIcon").textContent="!";$("statusMessage").textContent="STATUSページと同じ取得元への接続に失敗しました。正常稼働とは判定していません。";}
+  if(!services.length)throw new Error("services配列がありません");
+  const active=services.filter(s=>String(s.status||"").trim()!=="稼働中");
+  const maintenance=active.filter(s=>String(s.status||"").trim()==="メンテナンス中");
+  const unavailable=active.filter(s=>String(s.status||"").trim()==="接続不可");
+  const busy=active.filter(s=>String(s.status||"").trim()==="混雑");
+  if(maintenance.length){
+   $("statusTitle").textContent="現在メンテナンス中のサービスがあります";
+   $("statusIcon").textContent="!";
+   $("statusMessage").textContent=maintenance.map(s=>(s.name||s.key||"サービス")+"：メンテナンス中").join(" ／ ")+" ／ 更新："+(data.updatedAt||"日時情報なし");
+  }else if(unavailable.length||busy.length){
+   $("statusTitle").textContent="一部サービスに影響があります";
+   $("statusIcon").textContent="!";
+   $("statusMessage").textContent=active.map(s=>(s.name||s.key||"サービス")+"："+(s.status||"状態不明")).join(" ／ ")+" ／ 更新："+(data.updatedAt||"日時情報なし");
+  }else{
+   $("statusTitle").textContent=data.system||"現在、通常稼働中です";
+   $("statusIcon").textContent="✓";
+   $("statusMessage").textContent="STATUSページと同じ取得元から取得 ／ 対象サービス："+services.length+"件 ／ 更新："+(data.updatedAt||"日時情報なし");
+  }
+ }catch(error){
+  console.error("STATUS取得エラー",error);
+  $("statusTitle").textContent="稼働状況を取得できません";
+  $("statusIcon").textContent="!";
+  $("statusMessage").textContent="STATUSページと同じ取得元への接続に失敗しました。正常稼働とは判定していません。";
+ }
 }
 async function loadData(){
  $("loading").hidden=false;$("loading").innerHTML="<span class='spinner'></span>メンテナンス情報を読み込んでいます…";
@@ -176,10 +197,7 @@ async function loadData(){
   const data=await response.json();
   if(!Array.isArray(data.maintenance))throw new Error("JSONのmaintenance形式が正しくありません");
   appData=data;
-  const status=data.status||{};
-  $("statusTitle").textContent=status.overall==="operational"?"現在、通常稼働中です":status.overall==="maintenance"?"メンテナンスを実施しています":status.overall==="degraded"?"一部サービスに影響が発生しています":"稼働状況";
-  $("statusMessage").textContent=status.message||"最新のメンテナンス情報を表示しています。";
-  $("statusIcon").textContent=status.overall==="operational"?"✓":"!";
+  // 稼働状況パネルはSTATUSページと同じライブ取得元でのみ更新する。
   $("updated").textContent="最終更新："+(data.updatedAt||"日時情報なし")+" ／ 自動更新："+Math.round((data.settings?.refreshInterval||60000)/1000)+"秒";
   $("footerVersion").textContent=" / v"+(data.version||"1.0");
   $("loading").hidden=true;renderCalendar();renderNotices();
@@ -193,7 +211,7 @@ $("nextMonth").addEventListener("click",()=>{viewDate.setMonth(viewDate.getMonth
 $("refresh").addEventListener("click",loadData);
 loadData();
 loadLiveStatus();
-setInterval(()=>{if(appData?.settings?.autoRefresh!==false){loadData();loadLiveStatus()}},60000);
+setInterval(()=>{if(appData?.settings?.autoRefresh!==false)loadData();loadLiveStatus()},30000);
 </script>
 </body>
 </html>
