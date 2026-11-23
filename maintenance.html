@@ -121,7 +121,7 @@ const safe = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;"
 const parseLocalDate = value => {const [y,m,d] = String(value).split("-").map(Number);return new Date(y,m-1,d)};
 const todayKey = () => {const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 function statusLabel(status){return (appData?.statusTypes?.[status]?.label)||({scheduled:"予定",in_progress:"実施中",completed:"完了",cancelled:"中止",delayed:"延期"}[status]||"予定")}
-function eventsFor(date){const key=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");return (appData?.maintenance||[]).filter(x=>x.date===key)}
+function eventsFor(date){const key=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");return (appData?.maintenance||[]).filter(x=>{if(x.date===key)return true;const r=x.recurrence;return r&&r.frequency==="daily"&&key>=r.startDate&&(!r.endDate||key<=r.endDate)})}
 function renderCalendar(){
  const cal=$("calendar");cal.innerHTML="";
  WEEKDAYS.forEach((w,i)=>{const el=document.createElement("div");el.className="weekday";el.textContent=w;cal.appendChild(el)});
