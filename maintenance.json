@@ -1,6 +1,6 @@
 {
   "system": "BAINARI Maintenance Information",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "timezone": "Asia/Tokyo",
   "updatedAt": "2026-11-23T22:00:00+09:00",
   "settings": {
@@ -13,10 +13,41 @@
   },
   "status": {
     "overall": "operational",
-    "message": "現在、予定されているメンテナンスはありません",
+    "message": "現在のサービス稼働状況は、システム稼働状況ページと同じデータソースから取得します。",
     "updatedAt": "2026-11-23T22:00:00+09:00"
   },
-  "maintenance": [],
+  "maintenance": [
+    {
+      "id": "daily-market-ranking",
+      "title": "株シミュレーターLIFEオンライン（α版）市場・ランキングサーバー",
+      "recurrence": {
+        "frequency": "daily",
+        "startDate": "2026-11-23"
+      },
+      "startTime": "22:00",
+      "services": [
+        "株シミュレーターLIFEオンライン（α版）市場・ランキングサーバー"
+      ],
+      "description": "毎日22:00から実施する定期メンテナンスです。",
+      "impact": "メンテナンス中は市場・ランキング機能を利用できない場合があります。",
+      "status": "scheduled"
+    },
+    {
+      "id": "daily-web-page",
+      "title": "株シミュレーターLIFEオンライン（α版）WEBページ",
+      "recurrence": {
+        "frequency": "daily",
+        "startDate": "2026-11-23"
+      },
+      "startTime": "22:00",
+      "services": [
+        "株シミュレーターLIFEオンライン（α版）WEBページ"
+      ],
+      "description": "毎日22:00から実施する定期メンテナンスです。",
+      "impact": "メンテナンス中はWEBページの一部または全部を利用できない場合があります。",
+      "status": "scheduled"
+    }
+  ],
   "notices": [],
   "statusTypes": {
     "scheduled": {
