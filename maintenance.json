@@ -28,9 +28,11 @@
       "services": [
         "株シミュレーターLIFEオンライン（α版）市場・ランキングサーバー"
       ],
-      "description": "毎日22:00から実施する定期メンテナンスです。",
+      "description": "毎日22:00から翌日07:00まで実施する定期メンテナンスです。",
       "impact": "メンテナンス中は市場・ランキング機能を利用できない場合があります。",
-      "status": "scheduled"
+      "status": "scheduled",
+      "endTime": "07:00",
+      "endDayOffset": 1
     },
     {
       "id": "daily-web-page",
@@ -43,9 +45,11 @@
       "services": [
         "株シミュレーターLIFEオンライン（α版）WEBページ"
       ],
-      "description": "毎日22:00から実施する定期メンテナンスです。",
+      "description": "毎日22:00から翌日07:00まで実施する定期メンテナンスです。",
       "impact": "メンテナンス中はWEBページの一部または全部を利用できない場合があります。",
-      "status": "scheduled"
+      "status": "scheduled",
+      "endTime": "07:00",
+      "endDayOffset": 1
     }
   ],
   "notices": [],
