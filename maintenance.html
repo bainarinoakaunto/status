@@ -140,7 +140,9 @@ function renderCalendar(){
   const list=document.createElement("div");list.className="day-events";
   eventsFor(date).forEach(item=>{
    const b=document.createElement("button");b.className="event "+(item.status||"scheduled");b.type="button";
-   b.innerHTML=safe(item.title||"メンテナンス")+"<span class='event-time'>"+safe(item.startTime||"")+" "+(item.endTime?"– "+safe(item.endTime):"")+"</span>";
+    const overnight=item.endTime&&item.startTime&&item.endTime<item.startTime;
+    const endLabel=item.endTime?(overnight?"翌日 "+item.endTime:item.endTime):"";
+    b.innerHTML=safe(item.title||"メンテナンス")+"<span class='event-time'>"+safe(item.startTime||"")+" "+(endLabel?"– "+safe(endLabel):"")+"</span>";
    b.addEventListener("click",()=>showDetails(item));list.appendChild(b);
   });
   cell.appendChild(list);cal.appendChild(cell);
@@ -149,7 +151,9 @@ function renderCalendar(){
 }
 function showDetails(item){
  const services=Array.isArray(item.services)?item.services.join("、"):item.services||"指定なし";
- $("details").innerHTML="<h2>予定の詳細</h2><div class='detail-title'>"+safe(item.title||"メンテナンス")+"</div><div class='detail-meta'><span class='pill'>"+safe(item.date)+"</span><span class='pill'>"+safe(item.startTime||"時刻未定")+" – "+safe(item.endTime||"未定")+"</span><span class='pill'>"+safe(statusLabel(item.status))+"</span></div><div class='detail-body'>対象サービス："+safe(services)+"\n"+safe(item.description||"詳細情報はありません。")+"\n影響："+safe(item.impact||"記載なし")+"</div>";
+  const detailOvernight=item.endTime&&item.startTime&&item.endTime<item.startTime;
+  const detailEnd=item.endTime?(detailOvernight?"翌日 "+item.endTime:item.endTime):"未定";
+  $("details").innerHTML="<h2>予定の詳細</h2><div class='detail-title'>"+safe(item.title||"メンテナンス")+"</div><div class='detail-meta'><span class='pill'>"+safe(item.date||"毎日")+"</span><span class='pill'>"+safe(item.startTime||"時刻未定")+" – "+safe(detailEnd)+"</span><span class='pill'>"+safe(statusLabel(item.status))+"</span></div><div class='detail-body'>対象サービス："+safe(services)+"\n"+safe(item.description||"詳細情報はありません。")+"\n影響："+safe(item.impact||"記載なし")+"</div>";
 }
 function renderNotices(){
  const list=Array.isArray(appData?.notices)?appData.notices:[];
